@@ -25,3 +25,32 @@
 .composition-proof{position:absolute;right:1.05rem;bottom:1rem;color:#8fd3ff;font-size:.78rem;border-top:1px solid #8fd3ff59;padding-top:.45rem}
 @media (width<=980px){.director-pass{grid-template-columns:1fr}.systems-composition{min-height:330px}.composition-layer{width:min(82%,420px)}}
 @media (width<=620px){.artifact-stack div{grid-template-columns:2rem minmax(0,1fr)}.artifact-stack p{grid-column:2}.signature-panel .signature{font-size:2.15rem}.systems-composition{min-height:360px}.layer-mid{left:2.2rem}.composition-layer{width:calc(100% - 2rem)}.layer-front{right:.8rem}}
+
+
+/* Subtle appreciation pass: quiet craft details, not a louder theme. */
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(135deg,#8fd3ff12 0%,#8fd3ff05 18%,transparent 42%),linear-gradient(315deg,#8b5cf608 0%,transparent 28%);z-index:-1}
+.portfolio-nav[data-astro-cid-lcdefpme]{box-shadow:0 1px #ffffff08 inset,0 16px 34px #0004}
+.portfolio-links[data-astro-cid-lcdefpme] a[data-astro-cid-lcdefpme]{position:relative}
+.portfolio-links[data-astro-cid-lcdefpme] a[data-astro-cid-lcdefpme]:after{content:"";position:absolute;left:0;right:0;bottom:.2rem;height:1px;background:#8fd3ff;transform:scaleX(0);transform-origin:left;transition:transform .22s ease;opacity:.75}
+.portfolio-links[data-astro-cid-lcdefpme] a[data-astro-cid-lcdefpme]:hover:after{transform:scaleX(1)}
+.hero-grid[data-astro-cid-lcdefpme]{overflow:hidden;isolation:isolate}
+.hero-grid[data-astro-cid-lcdefpme] .hero-copy[data-astro-cid-lcdefpme]{position:relative}
+.hero-grid[data-astro-cid-lcdefpme] .hero-copy[data-astro-cid-lcdefpme]:before{content:"";position:absolute;left:-1.8rem;top:-1.35rem;width:6.5rem;height:6.5rem;border-top:1px solid #8fd3ff52;border-left:1px solid #8fd3ff52;box-shadow:-10px -10px 38px #8fd3ff14;pointer-events:none}
+.creative-control{position:relative}
+.creative-control:before{content:"";position:absolute;inset:.65rem;border-top:1px solid #ffffff14;border-left:1px solid #ffffff12;border-radius:6px;pointer-events:none}
+.hero-artifact{position:relative}
+.hero-artifact:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff10,transparent 24%,#00000022 100%);pointer-events:none}
+.artifact-caption{color:#8fd3ff;font-size:.72rem;line-height:1.35;border-bottom:1px solid #263547;padding-bottom:.55rem}
+.systems-composition:after{content:"";position:absolute;inset:auto 1rem 1rem auto;width:5.5rem;height:5.5rem;border-right:1px solid #8fd3ff38;border-bottom:1px solid #8fd3ff38;pointer-events:none}
+.composition-layer{transition:border-color .22s ease,box-shadow .22s ease}
+.composition-layer:hover{border-color:#8fd3ff7a;box-shadow:18px 22px 52px #00000066,inset 1px 1px #ffffff18}
+.pillar[data-astro-cid-lcdefpme],.project-card[data-astro-cid-lcdefpme],.stack-layer[data-astro-cid-lcdefpme],.evidence-block[data-astro-cid-lcdefpme]{position:relative;overflow:hidden}
+.pillar[data-astro-cid-lcdefpme]:after,.project-card[data-astro-cid-lcdefpme]:after,.stack-layer[data-astro-cid-lcdefpme]:after,.evidence-block[data-astro-cid-lcdefpme]:after{content:"";position:absolute;left:0;top:0;width:4.25rem;height:1px;background:#8fd3ff66;box-shadow:8px 10px 22px #2f8cff2e}
+.project-card[data-astro-cid-lcdefpme]{transition:border-color .22s ease,box-shadow .22s ease}
+.project-card[data-astro-cid-lcdefpme]:hover{border-color:#8fd3ffa6;box-shadow:22px 28px 72px #00000066,inset 1px 1px #ffffff16,inset -1px -1px #00000060}
+.project-link[data-astro-cid-lcdefpme]{position:relative;border-bottom:0}
+.project-link[data-astro-cid-lcdefpme]:after{content:"";position:absolute;left:0;right:0;bottom:.32rem;height:1px;background:#8fd3ff;transform-origin:left;transition:transform .22s ease}
+.project-link[data-astro-cid-lcdefpme]:hover:after{transform:scaleX(1.18)}
+.evidence-block[data-astro-cid-lcdefpme]{background:linear-gradient(145deg,#0d1520,#0a111b)}
+@media (prefers-reduced-motion:no-preference){.pulse-dot[data-astro-cid-lcdefpme]{animation:signal-breath 3.8s ease-in-out infinite}@keyframes signal-breath{0%,100%{box-shadow:0 0 0 4px #5ee6a814,0 0 16px #5ee6a829}50%{box-shadow:0 0 0 6px #5ee6a80d,0 0 28px #5ee6a83d}}}
+@media (width<=620px){.hero-grid[data-astro-cid-lcdefpme] .hero-copy[data-astro-cid-lcdefpme]:before{left:-.9rem;top:-.9rem;width:4.6rem;height:4.6rem}.artifact-caption{font-size:.68rem}.portfolio-links[data-astro-cid-lcdefpme]{gap:.9rem}}
