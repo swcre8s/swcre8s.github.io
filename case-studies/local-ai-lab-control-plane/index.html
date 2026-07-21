@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Local AI Lab Control Plane: Manifest-Driven Self-Healing · Case Studies</title><meta name="description" content="A two-machine AI lab (Mac orchestration, Windows GPU compute) failed silently: a wedged llama.cpp process exhausted the compute node's memory and took the primary 16B model offline while every status light stayed green. Repair knowledge lived in one-off scripts and operator memory."><style>html{color-scheme:dark;background:#0b1018}body{color:#c6d0de;letter-spacing:0;max-width:54rem;margin:0 auto;padding:2rem 1.25rem 4rem;font-family:system-ui,-apple-system,sans-serif;line-height:1.65;background:#0b1018;background-image:linear-gradient(135deg,#8fd3ff0b 0 1px,transparent 1px 72px)}main{position:relative}nav{margin-bottom:2rem}nav a{color:#a7b4c6;text-decoration:none}nav a:hover{color:#8fd3ff}header{padding:1.35rem 1.45rem 1.45rem;border:1px solid #34475d;border-radius:8px;background:#172231f2;box-shadow:18px 22px 52px #00000052,inset 1px 1px #ffffff12,inset -1px -1px #0000005c}h1{color:#f4f7fb;margin:0 0 .45rem;line-height:1.12;font-weight:650}h2{color:#f4f7fb;line-height:1.2;font-weight:600}.meta{color:#a7b4c6;flex-wrap:wrap;align-items:center;gap:.5rem;display:flex}.tag{color:#8fd3ff;border:1px solid #2f8cff59;border-radius:999px;background:#080d148c;padding:.05rem .6rem;font-size:.8rem}.summary{border-left:2px solid #2f8cff;margin:1.5rem 0 0;padding-left:1rem}.summary dt{color:#8fd3ff;text-transform:uppercase;font-size:.78rem;font-weight:700}.summary dd{margin:0 0 .9rem;color:#d7dfeb}.metrics{margin:0;padding-left:1.1rem}article{margin-top:2.5rem}article :is(h1,h2){margin-top:2.35rem}article p,article li{color:#c6d0de}article strong{color:#f4f7fb}code{color:#f4f7fb;background:#080d14;border:1px solid #263547;border-radius:4px;padding:.1rem .3rem}pre{background:#080d14;border:1px solid #263547;border-radius:8px;padding:1rem;overflow-x:auto;box-shadow:12px 16px 36px #0005}pre code{background:0 0;border:0;padding:0}img{display:block;max-width:100%;height:auto;border:1px solid #34475d;border-radius:8px;margin:1rem 0;box-shadow:18px 22px 52px #00000052}
+
+header{position:relative;overflow:hidden}
+header:before{content:"";position:absolute;left:0;top:0;width:7rem;height:1px;background:#8fd3ff8f;box-shadow:10px 12px 26px #2f8cff40}
+header:after{content:"";position:absolute;right:1rem;bottom:1rem;width:4.5rem;height:4.5rem;border-right:1px solid #8fd3ff2f;border-bottom:1px solid #8fd3ff2f;pointer-events:none}
+.summary{position:relative}
+.summary:before{content:"";position:absolute;left:-2px;top:0;width:2px;height:4.4rem;background:#8fd3ff;box-shadow:8px 10px 22px #2f8cff4d}
+article img{transition:filter .22s ease,border-color .22s ease}
+article img:hover{border-color:#8fd3ff91;filter:saturate(1.04) contrast(1.04)}
+</style></head><body><main><nav><a href="/">← All case studies</a></nav><header><h1>Local AI Lab Control Plane: Manifest-Driven Self-Healing</h1><p class="meta"><time datetime="2026-07-02">2026-07-02</time><span class="tag">Python</span><span class="tag">Pydantic</span><span class="tag">zsh</span><span class="tag">launchd</span><span class="tag">FastAPI</span><span class="tag">Ollama</span><span class="tag">llama.cpp</span></p><dl class="summary"><dt>Problem</dt><dd>A two-machine AI lab (Mac orchestration, Windows GPU compute) failed silently: a wedged llama.cpp process exhausted the compute node&#39;s memory and took the primary 16B model offline while every status light stayed green. Repair knowledge lived in one-off scripts and operator memory.</dd><dt>Solution</dt><dd>A built-in pipeline throughput utility plus a three-tier self-healing stack. The core engine clears stuck, stale, and orphaned processes against per-system parameters (CPU thresholds, staleness windows, orphan policy — AND-ed, never pattern-alone), then heals and escalates per a single JSON manifest each build ships. Doctrine enforced by construction: dry-run by default, allowlisted actions only, double-gated escalation, report every run.</dd><dt>Impact</dt><dd>The build documents a manifest-driven recovery/control-plane pattern for a two-machine local AI lab. Current public-safe evidence supports source artifacts, app bundle metadata, and clean Python syntax verification; stronger recovery timing and fault-injection claims are withheld until their source artifacts are attached.</dd><dt>Verification</dt><dd><ul class="metrics"><li>Current public-safe evidence proves source artifacts, app bundle metadata, and clean Python syntax verification.</li><li>Proof source: <code>outputs/resume_evidence_harvest_2026-07-10.md:104-119</code>.</li><li>Live fault-injection and unit-test-count claims are withheld until their source artifacts are attached.</li></ul></dd></dl></header><article><h1 id="problem-statement">Problem Statement</h1>
+<p>The lab splits work across a LAN: a Mac handles orchestration, UI, and routing;
+a Windows tower with a large GPU serves local LLMs (Ollama plus a standalone
+llama.cpp server). The failure that exposed the gap: the llama.cpp server wedged
+mid-load — its TCP port stayed open while HTTP went permanently silent — and
+squatted on enough memory that the primary 16B coding model could no longer
+load. Every coarse health check passed. Ping: fine. Port: open. Meanwhile the
+system’s actual capability was gone, and the diagnosis had to be reconstructed
+by hand, probe by probe.</p>
+<p>The deeper problem wasn’t the wedge. It was that recovery knowledge — which
+probes reveal which failure, which process is safe to kill, when the fix
+requires the other machine — existed only in shell history and operator memory.</p>
+<h1 id="technical-constraint">Technical Constraint</h1>
+<ul>
+<li><strong>No remote shell to the compute node.</strong> SSH closed, admin shares gated.
+Cross-machine repair must travel over an allowlisted file relay: each side
+writes only the files it owns, every request carries a task ID.</li>
+<li><strong>Repairs are destructive by nature</strong> (killing processes, swapping models),
+so every action must default to dry-run and be allowlisted by construction —
+an engine that <em>can only</em> run what a manifest declares.</li>
+<li><strong>Silent degradation is worse than failure.</strong> A fallback that quietly leaves
+the system on a weaker model forever is its own bug: overrides must restore
+themselves when the primary returns.</li>
+<li><strong>Heterogeneous stack</strong> — zsh, launchd, FastAPI, Ollama, llama.cpp — and more
+builds coming, each with different health semantics. Per-build repair scripts
+would multiply the original problem.</li>
+</ul>
+<h1 id="the-build-implementation-details">The Build (Implementation Details)</h1>
+<p><strong>Tier 1 — login verification.</strong> A launchd agent waits out the boot races
+(network up, external volumes mounted), verifies the full chain — compute node
+→ model server → primary model — starts the Mac-side gateway, and posts a
+one-line verdict notification.</p>
+<p><strong>Tier 2 — standing watchdog.</strong> A 120-second agent keepalives the LAN, watches
+the model server, and alarms on state change — including a tripwire for a
+specific banned model known to hang the machine.</p>
+<p><strong>Tier 3 — the repair arm.</strong> The core asset: a ~300-line Python engine
+(Pydantic 2 schema) driven entirely by a per-build JSON manifest.</p>
+<ul>
+<li><strong>Probes</strong> (read-only, always run): <code>http</code>, <code>tcp</code>, <code>ping</code>, <code>command</code>, <code>file</code> —
+the wedge that started all this is now a first-class signature: TCP port OK
+<em>and</em> HTTP dead.</li>
+<li><strong>Process clearing — the throughput guarantee.</strong> Allowlisted patterns with
+per-system thresholds: stuck (<code>max_cpu</code>), stale (<code>max_age_minutes</code>), orphaned
+(reparented to PID 1). Criteria AND together, so a brief CPU spike or an
+intentionally daemonized process survives; a rule with no threshold is
+rejected at manifest load — the engine cannot kill on pattern alone. This
+semantic was corrected by evidence: the first dry-run flagged the build’s own
+daemonized gateway as “orphaned,” proving OR-semantics unsafe before any
+process was ever harmed.</li>
+<li><strong>Heal rules:</strong> OR-of-AND trigger groups over probe results, plus
+<code>file_exists</code> / <code>file_absent</code> guards. The guards make stateful cycles
+declarative: <em>primary model missing + fallback present</em> → write an override
+env file and bounce the gateway; <em>primary back + override present</em> → remove
+the override and restore. No state machine in the engine.</li>
+<li><strong>Escalation:</strong> when local repair can’t reach the fault, the engine writes
+templated, task-ID-stamped request files into the relay lanes the Mac owns —
+and only fires behind two explicit flags (<code>--apply --escalate</code>).</li>
+<li><strong>Report every run:</strong> markdown verdict written to the shared relay, desktop
+notification, exit code for automation.</li>
+</ul>
+<p>The engine is presented publicly at the current evidence level: source artifacts, app bundle metadata, and clean syntax verification. Live fault-injection timing and unit-test-count claims are intentionally withheld until the matching proof artifacts are attached.</p>
+<h1 id="verification-status">Verification Status</h1>
+<ul>
+<li><strong>Verified now:</strong> source files, local server/CLI utility surfaces, app bundle metadata, and clean Python syntax verification.</li>
+<li><strong>Public-safe claim:</strong> built a LANShare diagnostics and recovery-control utility for a local AI lab.</li>
+<li><strong>Withheld until attached:</strong> live fault-injection timing, unit-test count, and end-to-end self-healing metrics.</li>
+</ul>
+</article></main></body></html>
