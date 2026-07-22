@@ -68,3 +68,10 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:lin
 .contact-links{display:flex;flex-wrap:wrap;gap:.7rem}
 .contact-links a{color:#f4f7fb;text-decoration:none;border:1px solid #34475d;border-radius:8px;padding:.75rem .9rem;background:#172231f2;box-shadow:10px 14px 28px #0004}
 .contact-links a:hover{border-color:#8fd3ff;color:#8fd3ff}
+
+
+/* Groccoli four-card grid patch */
+.project-grid[data-astro-cid-lcdefpme]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.project-card[data-astro-cid-lcdefpme]:nth-child(2),.project-card[data-astro-cid-lcdefpme]:nth-child(4){transform:translateY(.75rem)}
+.project-card[data-astro-cid-lcdefpme]:nth-child(3){transform:none}
+@media (width<=980px){.project-card[data-astro-cid-lcdefpme]:nth-child(2),.project-card[data-astro-cid-lcdefpme]:nth-child(3),.project-card[data-astro-cid-lcdefpme]:nth-child(4){transform:none}}
