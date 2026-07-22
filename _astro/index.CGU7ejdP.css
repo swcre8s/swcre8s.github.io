@@ -75,3 +75,52 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:lin
 .project-card[data-astro-cid-lcdefpme]:nth-child(2),.project-card[data-astro-cid-lcdefpme]:nth-child(4){transform:translateY(.75rem)}
 .project-card[data-astro-cid-lcdefpme]:nth-child(3){transform:none}
 @media (width<=980px){.project-card[data-astro-cid-lcdefpme]:nth-child(2),.project-card[data-astro-cid-lcdefpme]:nth-child(3),.project-card[data-astro-cid-lcdefpme]:nth-child(4){transform:none}}
+
+
+/* Brand artifact pass for flagship cards. */
+.project-card[data-astro-cid-lcdefpme]{background-image:linear-gradient(145deg,#1a2738f5,#101925f5 68%,#0a1018f5);min-height:100%;grid-template-rows:auto auto auto auto 1fr auto}
+.project-visual{position:relative;aspect-ratio:16/7;border:1px solid #314962;border-radius:8px;overflow:hidden;background:#070c12;box-shadow:14px 18px 38px #0000005c,inset 1px 1px #ffffff12,inset -1px -1px #00000066}
+.project-visual:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff14,transparent 28%,#00000042 100%);z-index:1;pointer-events:none}
+.project-visual:after{content:"";position:absolute;left:0;top:0;width:46%;height:1px;background:#8fd3ff88;box-shadow:10px 12px 26px #2f8cff52;z-index:2}
+.project-visual img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.95) contrast(1.05) brightness(.82)}
+.project-visual--groccoli img{object-position:center 42%}
+.project-visual--lavatube img{object-position:center 50%;filter:saturate(1.02) contrast(1.05) brightness(.76)}
+.project-visual--triggermap img{object-position:center 42%;filter:saturate(1.02) contrast(1.06) brightness(.82)}
+.project-card--groccoli[data-astro-cid-lcdefpme]{border-color:#37e89075}
+.project-card--lavatube[data-astro-cid-lcdefpme]{border-color:#ff7a1a78}
+.project-card--triggermap[data-astro-cid-lcdefpme]{border-color:#7c66ff78}
+.project-card--groccoli[data-astro-cid-lcdefpme] .proof[data-astro-cid-lcdefpme]{color:#7df4bb}
+.project-card--lavatube[data-astro-cid-lcdefpme] .proof[data-astro-cid-lcdefpme]{color:#ffb06a}
+.project-card--triggermap[data-astro-cid-lcdefpme] .proof[data-astro-cid-lcdefpme].warning{color:#b9a6ff}
+.project-visual--platform{display:grid;grid-template-columns:.62fr 1fr;align-items:center;gap:1rem;padding:1rem;background:radial-gradient(circle at 28% 48%,#2f8cff2b,transparent 38%),linear-gradient(145deg,#101a28,#070c12)}
+.signal-ring{width:7rem;aspect-ratio:1;border-radius:999px;display:grid;place-items:center;text-align:center;border:2px solid #2f8cff;background:radial-gradient(circle,#172231 0 52%,#080d14 54%);box-shadow:0 0 28px #2f8cff40,inset 1px 1px #ffffff18}
+.signal-ring span{display:block;color:#f4f7fb;font-size:1.34rem;font-weight:650;line-height:1}
+.signal-ring b{color:#8fd3ff;text-transform:uppercase;font-size:.62rem;letter-spacing:.08em}
+.latency-row{display:grid;gap:.55rem}
+.latency-row span{color:#c6d0de;border:1px solid #34475d;border-left:2px solid #8fd3ff;border-radius:6px;background:#0b1018ba;padding:.5rem .6rem;font-size:.78rem;box-shadow:8px 10px 22px #0004}
+.project-visual--codeforge{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;align-items:end;padding:1rem;background:linear-gradient(145deg,#121b28,#070c12)}
+.project-visual--codeforge span{position:relative;z-index:2;color:#f4f7fb;text-align:center;border:1px solid #34475d;border-top-color:#8fd3ff80;border-radius:6px;background:#172231f2;padding:1.6rem .45rem .55rem;font-size:.78rem;box-shadow:10px 14px 28px #0005,inset 1px 1px #ffffff12}
+.project-visual--codeforge span:nth-child(2){padding-top:2.5rem;border-top-color:#f7c76a99}
+.project-visual--codeforge span:nth-child(3){padding-top:3.4rem;border-top-color:#8fd3ff99}
+.project-visual--codeforge i{position:absolute;left:1rem;right:1rem;bottom:1.05rem;height:1px;background:linear-gradient(90deg,transparent,#8fd3ff,#8b5cf6,transparent);box-shadow:0 0 18px #2f8cff59}
+@media (width<=620px){.project-visual--platform{grid-template-columns:1fr}.signal-ring{width:6.25rem}.project-card[data-astro-cid-lcdefpme]{grid-template-rows:auto}}
+
+
+/* Deliberate wide row for the fifth flagship card. */
+@media (min-width:981px){
+  .project-card--triggermap[data-astro-cid-lcdefpme]{grid-column:1/-1;grid-template-columns:minmax(320px,.72fr) minmax(0,1fr);grid-template-rows:auto auto auto auto auto;column-gap:1.35rem;align-items:center}
+  .project-card--triggermap[data-astro-cid-lcdefpme] .project-visual{grid-row:1/6;min-height:220px;height:100%;aspect-ratio:auto}
+  .project-card--triggermap[data-astro-cid-lcdefpme] h3[data-astro-cid-lcdefpme],
+  .project-card--triggermap[data-astro-cid-lcdefpme] p[data-astro-cid-lcdefpme],
+  .project-card--triggermap[data-astro-cid-lcdefpme] .tag-list[data-astro-cid-lcdefpme],
+  .project-card--triggermap[data-astro-cid-lcdefpme] .project-link[data-astro-cid-lcdefpme]{grid-column:2}
+}
+
+
+/* Final responsive guard: keep branded cards from crowding tablet/mobile widths. */
+@media (max-width:980px){
+  .project-grid[data-astro-cid-lcdefpme]{grid-template-columns:1fr}
+  .project-card[data-astro-cid-lcdefpme]:nth-child(2),
+  .project-card[data-astro-cid-lcdefpme]:nth-child(3),
+  .project-card[data-astro-cid-lcdefpme]:nth-child(4){transform:none}
+}
